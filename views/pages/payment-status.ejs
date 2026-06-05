@@ -1,0 +1,13 @@
+<%- include('../partials/head') %><%- include('../partials/nav') %>
+<main class="auth-page"><div class="auth-card mpesa-card" style="text-align:center">
+  <% if(status==='confirmed'){ %><div class="status-icon">✅</div><h2 class="auth-title" style="color:#22c55e">Payment Confirmed!</h2><p class="auth-sub">Welcome to <strong>HeartLink <%= plan?plan.label:'' %></strong>! Your account is upgraded.</p><a href="/dashboard" class="btn btn-primary btn-lg" style="margin-top:20px">Start Exploring 💖</a>
+  <% }else if(status==='cancelled'){ %><div class="status-icon">🚫</div><h2 class="auth-title">Cancelled</h2><p class="auth-sub">No charge was made.</p><a href="/#pricing" class="btn btn-ghost btn-lg" style="margin-top:20px">View Plans</a>
+  <% }else if(status==='failed'){ %><div class="status-icon">❌</div><h2 class="auth-title">Payment Failed</h2><p class="auth-sub">Please try again.</p><a href="/payment/pay/<%= payment?payment.plan:'plus' %>" class="btn btn-primary btn-lg" style="margin-top:20px">Try Again</a>
+  <% }else{ %><div class="status-icon spin">💳</div><h2 class="auth-title">Awaiting Payment</h2>
+    <% if(locals.isLocalMode){ %><div class="local-mode-banner" style="margin-top:20px"><p class="local-mode-title">🛠️ Local Test Mode</p><p class="local-mode-sub">Click to simulate a successful payment.</p><button class="btn-stripe" style="margin-top:12px;width:100%" onclick="simulatePayment()">💳 Simulate Confirmation</button></div><% } %>
+  <% } %>
+</div></main>
+<script>
+async function simulatePayment(){const btn=document.querySelector('.local-mode-banner .btn-stripe');if(btn){btn.disabled=true;btn.textContent='⏳ Confirming…';}try{const r=await fetch('/payment/test-confirm/<%= payment?payment.id:0 %>',{method:'POST'});const d=await r.json();if(d.success)window.location.reload();else if(btn){btn.disabled=false;btn.textContent='💳 Simulate Confirmation';}}catch(e){if(btn){btn.disabled=false;btn.textContent='💳 Simulate Confirmation';}}}
+</script>
+<%- include('../partials/footer') %>

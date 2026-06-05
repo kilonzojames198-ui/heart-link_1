@@ -1,0 +1,47 @@
+<%- include('../../partials/head') %>
+<nav class="tinder-nav"><div class="tn-left"><a href="/" class="tn-logo"><img src="/img/logo.svg" alt="HeartLink" class="tn-logo-img"/></a></div><div class="tn-right"><a href="/dashboard" class="btn btn-ghost btn-sm">App</a><form action="/auth/logout" method="POST" style="display:inline"><button class="btn btn-ghost btn-sm" type="submit">Sign out</button></form></div></nav>
+<main class="admin-main">
+  <div class="admin-wrap">
+    <div class="admin-sidebar">
+      <p class="admin-sidebar-title">Admin Panel</p>
+      <a href="/admin" class="admin-nav-link">📊 Dashboard</a>
+      <a href="/admin/users" class="admin-nav-link active">👥 Users</a>
+      <a href="/admin/payments" class="admin-nav-link">💳 Payments</a>
+    </div>
+    <div class="admin-content">
+      <h1 class="admin-page-title">Manage Users</h1>
+      <form action="/admin/users" method="GET" style="margin-bottom:20px;display:flex;gap:10px">
+        <input type="text" name="q" value="<%= q %>" placeholder="Search name or email…" style="flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);outline:none"/>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <% if(q){ %><a href="/admin/users" class="btn btn-ghost">Clear</a><% } %>
+      </form>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Age</th><th>Plan</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody>
+            <% users.forEach(u => { %>
+              <tr>
+                <td><strong><%= u.name %></strong></td>
+                <td style="font-size:12px;color:var(--muted)"><%= u.email %></td>
+                <td><%= u.age %></td>
+                <td><span class="plan-badge plan-badge--<%= u.plan||'free' %>"><%= (u.plan||'free').toUpperCase() %></span></td>
+                <td><span class="status-pill status-pill--<%= u.is_active?'confirmed':'failed' %>"><%= u.is_active?'Active':'Suspended' %></span></td>
+                <td style="font-size:12px;color:var(--muted)"><%= new Date(u.created_at).toLocaleDateString() %></td>
+                <td style="display:flex;gap:6px;flex-wrap:wrap">
+                  <form action="/admin/users/<%= u.id %>/toggle" method="POST" style="display:inline">
+                    <button class="btn btn-ghost btn-sm" style="font-size:11px"><%= u.is_active?'Suspend':'Restore' %></button>
+                  </form>
+                  <form action="/admin/users/<%= u.id %>/delete" method="POST" style="display:inline" onsubmit="return confirm('Delete <%= u.name %>? This cannot be undone.')">
+                    <button class="btn btn-sm" style="font-size:11px;background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3)">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px;font-size:12px;color:var(--muted)"><%= users.length %> user(s) found</p>
+    </div>
+  </div>
+</main>
+<script src="/js/main.js"></script></body></html>

@@ -1,0 +1,18 @@
+const express = require('express');
+const router  = express.Router();
+const multer  = require('multer');
+const path    = require('path');
+const { requireAuth } = require('../middleware/auth');
+const ctrl = require('../controllers/chatController');
+const storage = multer.diskStorage({ destination:(req,file,cb)=>cb(null,path.join(__dirname,'../public/uploads')), filename:(req,file,cb)=>cb(null,`${Date.now()}-${file.originalname.replace(/\s/g,'_')}`) });
+const upload = multer({ storage, limits:{fileSize:5*1024*1024} });
+router.get('/unread',          requireAuth, ctrl.unreadCount);
+router.get('/',                requireAuth, ctrl.getChats);
+router.get('/:matchId',        requireAuth, ctrl.getChatRoom);
+router.get('/:matchId/poll',   requireAuth, ctrl.pollMessages);
+router.post('/:matchId/send',  requireAuth, upload.single('image'), ctrl.sendMessage);
+router.post('/:matchId/report',requireAuth, ctrl.reportUser);
+router.post('/:matchId/block', requireAuth, ctrl.blockUser);
+router.post('/:matchId/unmatch',requireAuth,ctrl.unmatch);
+router.post('/:matchId/mute',  requireAuth, ctrl.muteUser);
+module.exports = router;

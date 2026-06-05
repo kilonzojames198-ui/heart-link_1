@@ -1,0 +1,56 @@
+<% locals.activePage = 'profile' %>
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<main class="auth-page">
+  <div class="auth-card auth-card--wide">
+    <h2 class="auth-title">My Profile</h2>
+    <% if(error){ %><div class="alert alert-error"><%= error %></div><% } %>
+    <% if(success){ %><div class="alert alert-success"><%= success %></div><% } %>
+    <form action="/profile" method="POST" enctype="multipart/form-data" class="auth-form">
+      <div class="avatar-preview-wrap">
+        <% if(user.avatar){ %><img src="<%= user.avatar %>" alt="avatar" class="avatar-preview" id="avatar-preview"/><% }else{ %><div class="avatar-preview avatar-preview--placeholder" id="avatar-preview"><%= user.name.charAt(0) %></div><% } %>
+        <label class="avatar-edit-btn">Change photo<input type="file" name="avatar" accept="image/*" onchange="previewAvatar(this)" style="display:none"/></label>
+        <input type="hidden" name="current_avatar" value="<%= user.avatar||'' %>"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name</label><input type="text" name="name" required value="<%= user.name %>"/></div>
+        <div class="form-group"><label>Age</label><input type="number" name="age" required min="18" value="<%= user.age %>"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>I am</label><select name="gender" required><option value="male" <%= user.gender==='male'?'selected':'' %>>Man</option><option value="female" <%= user.gender==='female'?'selected':'' %>>Woman</option><option value="non-binary" <%= user.gender==='non-binary'?'selected':'' %>>Non-binary</option><option value="other" <%= user.gender==='other'?'selected':'' %>>Other</option></select></div>
+        <div class="form-group"><label>Interested in</label><select name="interested_in"><option value="everyone" <%= user.interested_in==='everyone'?'selected':'' %>>Everyone</option><option value="male" <%= user.interested_in==='male'?'selected':'' %>>Men</option><option value="female" <%= user.interested_in==='female'?'selected':'' %>>Women</option><option value="non-binary" <%= user.interested_in==='non-binary'?'selected':'' %>>Non-binary</option></select></div>
+      </div>
+      <div class="form-group"><label>About you</label><textarea name="bio" rows="3" maxlength="500"><%= user.bio %></textarea></div>
+      <div class="form-group">
+        <label>Interests</label>
+        <input type="text" id="interests-input" placeholder="Type and press Enter or comma"/>
+        <div id="tags-display" class="tags-display"></div>
+        <div id="interests-hidden"></div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+    </form>
+    <div style="margin-top:24px;padding-top:24px;border-top:1px solid var(--border)">
+      <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Current Plan</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="plan-badge plan-badge--<%= user.plan||'free' %>"><%= (user.plan||'free').toUpperCase() %></span>
+          <span style="font-size:13px;color:var(--muted)"><% if(!user.plan||user.plan==='free'){ %>Free plan<% }else{ %>Active subscription<% } %></span>
+        </div>
+        <% if(!user.plan||user.plan==='free'){ %><a href="/payment/pay/plus" class="btn btn-primary btn-sm">Upgrade 💳</a><% } %>
+      </div>
+    </div>
+    <a href="/payment/history" class="profile-payments-link"><div class="ppl-left"><strong>💳 Payment History</strong><span>View your transactions</span></div><span style="color:var(--muted)">→</span></a>
+  </div>
+</main>
+<script>
+function previewAvatar(input){const p=document.getElementById('avatar-preview');if(input.files&&input.files[0]){const r=new FileReader();r.onload=e=>{if(p.tagName==='IMG')p.src=e.target.result;else{const img=document.createElement('img');img.src=e.target.result;img.className='avatar-preview';img.id='avatar-preview';p.replaceWith(img);}};r.readAsDataURL(input.files[0]);}}
+const input=document.getElementById('interests-input');
+const display=document.getElementById('tags-display');
+const hidden=document.getElementById('interests-hidden');
+let tags=<%- JSON.stringify(user.interests||[]) %>;
+function renderTags(){display.innerHTML=tags.map((t,i)=>`<span class="tag">${t}<button type="button" onclick="removeTag(${i})">×</button></span>`).join('');hidden.innerHTML=tags.map(t=>`<input type="hidden" name="interests" value="${t}"/>`).join('');}
+input.addEventListener('keydown',e=>{if(e.key===','||e.key==='Enter'){e.preventDefault();const v=input.value.trim().replace(/,$/,'');if(v&&!tags.includes(v)){tags.push(v);renderTags();}input.value='';}});
+function removeTag(i){tags.splice(i,1);renderTags();}
+renderTags();
+</script>
+<%- include('../partials/footer') %>

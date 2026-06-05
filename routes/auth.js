@@ -1,0 +1,14 @@
+const express = require('express');
+const router  = express.Router();
+const multer  = require('multer');
+const path    = require('path');
+const { redirectIfAuth } = require('../middleware/auth');
+const ctrl = require('../controllers/authController');
+const storage = multer.diskStorage({ destination:(req,file,cb)=>cb(null,path.join(__dirname,'../public/uploads')), filename:(req,file,cb)=>cb(null,`${Date.now()}-${file.originalname.replace(/\s/g,'_')}`) });
+const upload = multer({ storage, limits:{fileSize:5*1024*1024} });
+router.get('/register',  redirectIfAuth, ctrl.getRegister);
+router.post('/register', redirectIfAuth, upload.single('avatar'), ctrl.postRegister);
+router.get('/login',     redirectIfAuth, ctrl.getLogin);
+router.post('/login',    redirectIfAuth, ctrl.postLogin);
+router.post('/logout',   ctrl.logout);
+module.exports = router;

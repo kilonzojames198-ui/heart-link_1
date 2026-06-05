@@ -1,0 +1,117 @@
+<% locals.activePage = 'chats' %>
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<main class="chat-layout <%= locals.activeMatch ? 'has-active' : '' %>" id="chat-layout">
+  <aside class="chat-sidebar" id="chat-sidebar">
+    <div class="sidebar-head">Messages<span class="unread-nav-badge" id="total-unread" style="display:none"></span></div>
+    <div class="match-list">
+      <% if (!matches.length) { %><div class="sidebar-empty"><p>No matches yet.</p><a href="/dashboard" class="btn btn-primary btn-sm">Start Exploring</a></div><% } %>
+      <% matches.forEach(m => { %>
+        <a href="/chats/<%= m.match_id %>" class="match-item <%= (locals.activeMatch&&activeMatch.id===m.match_id)?'active':'' %>" onclick="onChatSelect()">
+          <div class="match-ava"><% if(m.avatar){ %><img src="<%= m.avatar %>" alt="<%= m.name %>"/><% }else{ %><div class="ava-placeholder"><%= m.name.charAt(0) %></div><% } %></div>
+          <div class="match-meta"><div class="match-meta-name"><%= m.name %></div><div class="match-meta-preview"><%= m.last_msg||'Say hello 👋' %></div></div>
+          <% if(m.unread>0){ %><span class="unread-badge"><%= m.unread %></span><% } %>
+        </a>
+      <% }) %>
+    </div>
+  </aside>
+  <section class="chat-main" id="chat-main">
+    <% if (locals.activeMatch && activeMatch) { %>
+      <div class="chat-header">
+        <button class="chat-back-btn" onclick="goBackToList()"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+        <button class="chat-header-profile-btn" id="open-profile-btn"><% if(activeMatch.other.avatar){ %><img src="<%= activeMatch.other.avatar %>" alt="<%= activeMatch.other.name %>"/><% }else{ %><div class="ava-placeholder ava-placeholder--md"><%= activeMatch.other.name.charAt(0) %></div><% } %></button>
+        <div class="chat-header-info" id="open-profile-btn2" style="cursor:pointer"><p class="chat-header-name"><%= activeMatch.other.name %></p><p class="chat-header-status">Matched</p></div>
+        <div class="chat-header-actions">
+          <button class="hdr-btn <%= locals.isMuted?'hdr-btn--active':'' %>" id="mute-btn" onclick="toggleMute()"><%= locals.isMuted?'🔕':'🔔' %></button>
+          <div class="hdr-menu-wrap"><button class="hdr-btn" onclick="toggleMenu()" id="menu-btn">⋯</button>
+            <div class="hdr-dropdown" id="hdr-dropdown">
+              <button onclick="openProfile()">👤 View Profile</button>
+              <button onclick="openReport()">🚩 Report</button>
+              <button onclick="doUnmatch()" class="danger-action">💔 Unmatch</button>
+              <button onclick="doBlock()" class="danger-action">🚫 Block</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="messages" id="messages">
+        <% if(!messages.length){ %><div class="messages-empty" id="empty-hint">Send the first message! 👋</div><% } %>
+        <% messages.forEach(msg => { %>
+          <div class="msg-wrap msg-wrap--<%= msg.sender_id===currentUserId?'me':'them' %>" data-ts="<%= msg.created_at %>">
+            <div class="msg msg--<%= msg.sender_id===currentUserId?'me':'them' %>">
+              <% if(msg.image_url){ %><img src="<%= msg.image_url %>" class="msg-img" alt="image"/><% } %>
+              <% if(msg.content){ %><p><%= msg.content %></p><% } %>
+              <div class="msg-meta"><span class="msg-time"><%= new Date(msg.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) %></span><% if(msg.sender_id===currentUserId){ %><span class="msg-tick <%= msg.read_at?'msg-tick--read':'' %>"><%= msg.read_at?'✓✓':'✓' %></span><% } %></div>
+            </div>
+          </div>
+        <% }) %>
+        <div id="typing-bubble" style="display:none"><div class="msg-wrap msg-wrap--them"><div class="msg msg--them typing-msg"><span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span></div></div></div>
+      </div>
+      <form id="chat-form" action="/chats/<%= activeMatch.id %>/send" method="POST" enctype="multipart/form-data" class="chat-input-row">
+        <label class="file-btn">📎<input type="file" name="image" accept="image/*" style="display:none" onchange="this.form.submit()"/></label>
+        <input class="chat-input" type="text" name="content" id="chat-input" placeholder="Type a message…" autocomplete="off"/>
+        <button type="submit" class="send-btn">➤</button>
+      </form>
+    <% } else { %>
+      <div class="chat-empty"><div class="chat-empty-icon">💬</div><p>Select a conversation</p></div>
+    <% } %>
+  </section>
+  <% if(locals.activeMatch&&activeMatch){ %>
+  <aside class="profile-sidebar" id="profile-sidebar">
+    <div class="psb-inner">
+      <button class="psb-close" onclick="closeProfile()">✕</button>
+      <div class="psb-avatar"><% if(otherUser&&otherUser.avatar){ %><img src="<%= otherUser.avatar %>" alt="<%= otherUser.name %>"/><% }else if(otherUser){ %><div class="psb-ava-placeholder"><%= otherUser.name.charAt(0) %></div><% } %></div>
+      <h3 class="psb-name"><%= otherUser?otherUser.name:'' %><% if(otherUser&&otherUser.age){ %>, <%= otherUser.age %><% } %></h3>
+      <% if(otherUser&&otherUser.bio){ %><p class="psb-bio"><%= otherUser.bio %></p><% } %>
+      <% if(otherUser&&otherUser.interests&&otherUser.interests.length){ %><div class="psb-tags"><% otherUser.interests.forEach(i=>{ %><span class="tag"><%= i %></span><% }) %></div><% } %>
+      <div class="psb-actions"><button class="btn btn-ghost btn-sm" onclick="openReport()">🚩 Report</button><button class="btn btn-ghost btn-sm danger-action" onclick="doUnmatch()">💔 Unmatch</button><button class="btn btn-ghost btn-sm danger-action" onclick="doBlock()">🚫 Block</button></div>
+    </div>
+  </aside>
+  <% } %>
+</main>
+<% if(locals.activeMatch&&activeMatch){ %>
+<div class="modal-overlay" id="report-modal">
+  <div class="modal-card">
+    <h3 class="modal-title">🚩 Report <%= activeMatch.other.name %></h3>
+    <div class="report-reasons">
+      <label class="reason-opt"><input type="radio" name="report-reason" value="Spam"/> Spam or scam</label>
+      <label class="reason-opt"><input type="radio" name="report-reason" value="Harassment"/> Harassment</label>
+      <label class="reason-opt"><input type="radio" name="report-reason" value="Fake Profile"/> Fake profile</label>
+      <label class="reason-opt"><input type="radio" name="report-reason" value="Inappropriate Content"/> Inappropriate content</label>
+      <label class="reason-opt"><input type="radio" name="report-reason" value="Other"/> Other</label>
+    </div>
+    <textarea id="report-detail" placeholder="Optional details…" rows="3" class="report-textarea"></textarea>
+    <div class="modal-btns"><button class="btn btn-ghost btn-sm" onclick="closeReport()">Cancel</button><button class="btn btn-primary btn-sm" onclick="submitReport()">Submit</button></div>
+    <div id="report-feedback" style="display:none" class="alert alert-success"></div>
+  </div>
+</div>
+<% } %>
+<script>
+const MATCH_ID=<%= locals.activeMatch?activeMatch.id:'null' %>;
+const CURRENT_USER=<%= currentUserId %>;
+let lastTs='',isMuted=<%= locals.isMuted?'true':'false' %>;
+const msgsEl=document.getElementById('messages');
+function scrollBottom(){if(msgsEl)msgsEl.scrollTop=msgsEl.scrollHeight;}
+scrollBottom();
+if(msgsEl){const all=msgsEl.querySelectorAll('[data-ts]');if(all.length)lastTs=all[all.length-1].getAttribute('data-ts');}
+if(MATCH_ID){setInterval(async()=>{try{const res=await fetch(`/chats/${MATCH_ID}/poll?since=${encodeURIComponent(lastTs)}`);const msgs=await res.json();if(!msgs.length)return;const eh=document.getElementById('empty-hint');if(eh)eh.remove();msgs.forEach(msg=>{lastTs=msg.created_at;const isMe=msg.sender_id===CURRENT_USER;const w=document.createElement('div');w.className=`msg-wrap msg-wrap--${isMe?'me':'them'}`;w.setAttribute('data-ts',msg.created_at);const t=new Date(msg.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});w.innerHTML=`<div class="msg msg--${isMe?'me':'them'}">${msg.content?`<p>${msg.content}</p>`:''}${msg.image_url?`<img src="${msg.image_url}" class="msg-img"/>`:''}<div class="msg-meta"><span class="msg-time">${t}</span>${isMe?'<span class="msg-tick">✓</span>':''}</div></div>`;msgsEl.insertBefore(w,document.getElementById('typing-bubble'));});scrollBottom();}catch(e){}},2500);}
+async function updateUnread(){try{const r=await fetch('/chats/unread');const d=await r.json();const el=document.getElementById('total-unread');if(el){if(d.count>0){el.textContent=d.count;el.style.display='inline-flex';}else el.style.display='none';}}catch(e){}}
+updateUnread();
+function onChatSelect(){if(window.innerWidth<=768){document.getElementById('chat-sidebar').classList.remove('mobile-show');document.getElementById('chat-main').classList.add('mobile-show');}}
+function goBackToList(){document.getElementById('chat-sidebar').classList.add('mobile-show');document.getElementById('chat-main').classList.remove('mobile-show');}
+if(MATCH_ID&&window.innerWidth<=768){document.getElementById('chat-main')?.classList.add('mobile-show');document.getElementById('chat-sidebar')?.classList.remove('mobile-show');}else if(window.innerWidth<=768){document.getElementById('chat-sidebar')?.classList.add('mobile-show');}
+function openProfile(){document.getElementById('profile-sidebar')?.classList.add('open');closeMenu();}
+function closeProfile(){document.getElementById('profile-sidebar')?.classList.remove('open');}
+document.getElementById('open-profile-btn')?.addEventListener('click',openProfile);
+document.getElementById('open-profile-btn2')?.addEventListener('click',openProfile);
+function toggleMenu(){document.getElementById('hdr-dropdown')?.classList.toggle('open');}
+function closeMenu(){document.getElementById('hdr-dropdown')?.classList.remove('open');}
+document.addEventListener('click',e=>{if(!document.getElementById('menu-btn')?.contains(e.target))closeMenu();});
+async function toggleMute(){if(!MATCH_ID)return;const r=await fetch(`/chats/${MATCH_ID}/mute`,{method:'POST'});const d=await r.json();isMuted=d.muted;const btn=document.getElementById('mute-btn');if(btn){btn.textContent=isMuted?'🔕':'🔔';btn.classList.toggle('hdr-btn--active',isMuted);}showToast(d.message);}
+async function doUnmatch(){if(!MATCH_ID||!confirm('Unmatch?'))return;const d=await(await fetch(`/chats/${MATCH_ID}/unmatch`,{method:'POST'})).json();if(d.redirect)window.location.href=d.redirect;}
+async function doBlock(){if(!MATCH_ID||!confirm('Block this user?'))return;const d=await(await fetch(`/chats/${MATCH_ID}/block`,{method:'POST'})).json();if(d.redirect)window.location.href=d.redirect;}
+function openReport(){document.getElementById('report-modal')?.classList.add('open');closeMenu();}
+function closeReport(){document.getElementById('report-modal')?.classList.remove('open');}
+async function submitReport(){if(!MATCH_ID)return;const reason=document.querySelector('input[name="report-reason"]:checked')?.value;if(!reason){showToast('Select a reason.');return;}const detail=document.getElementById('report-detail')?.value||'';const r=await fetch(`/chats/${MATCH_ID}/report`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({reason,detail})});const d=await r.json();const fb=document.getElementById('report-feedback');if(fb){fb.textContent=d.message;fb.style.display='block';}setTimeout(closeReport,2500);}
+function showToast(msg){let t=document.getElementById('chat-toast');if(!t){t=document.createElement('div');t.id='chat-toast';t.className='chat-toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2800);}
+</script>
+<%- include('../partials/footer') %>

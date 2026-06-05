@@ -1,0 +1,13 @@
+const express = require('express');
+const router  = express.Router();
+const { requireAuth } = require('../middleware/auth');
+const ctrl = require('../controllers/paymentController');
+router.post('/webhook',        express.raw({type:'application/json'}), ctrl.webhook);
+router.get('/pay/:plan',       requireAuth, ctrl.getPayPage);
+router.post('/pay/:plan',      requireAuth, ctrl.initiatePayment);
+router.get('/success',         requireAuth, ctrl.paymentSuccess);
+router.get('/cancelled',       requireAuth, ctrl.paymentCancelled);
+router.get('/status/:id',      requireAuth, ctrl.getStatus);
+router.get('/history',         requireAuth, ctrl.getHistory);
+router.post('/test-confirm/:id', ctrl.testConfirm);
+module.exports = router;

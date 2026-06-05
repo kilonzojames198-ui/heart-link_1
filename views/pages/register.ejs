@@ -1,0 +1,78 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<main class="auth-page">
+  <div class="auth-card auth-card--wide">
+    <h2 class="auth-title">Create your account</h2>
+    <p class="auth-sub">Find your person on HeartLink</p>
+    <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+    <form action="/auth/register" method="POST" enctype="multipart/form-data" class="auth-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required placeholder="Your name"/>
+        </div>
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required placeholder="you@email.com"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input type="password" id="password" name="password" required minlength="6" placeholder="Min 6 characters"/>
+        </div>
+        <div class="form-group">
+          <label for="age">Age *</label>
+          <input type="number" id="age" name="age" required min="18" max="99" placeholder="18+"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="gender">I am *</label>
+          <select id="gender" name="gender" required>
+            <option value="">Select…</option>
+            <option value="male">Man</option>
+            <option value="female">Woman</option>
+            <option value="non-binary">Non-binary</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="interested_in">Interested in</label>
+          <select id="interested_in" name="interested_in">
+            <option value="everyone">Everyone</option>
+            <option value="male">Men</option>
+            <option value="female">Women</option>
+            <option value="non-binary">Non-binary</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="bio">About you</label>
+        <textarea id="bio" name="bio" rows="3" maxlength="500" placeholder="Tell potential matches about yourself…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Interests <span class="hint">(press Enter or comma)</span></label>
+        <input type="text" id="interests-input" placeholder="e.g. hiking, coffee, photography"/>
+        <div id="tags-display" class="tags-display"></div>
+        <div id="interests-hidden"></div>
+      </div>
+      <div class="form-group">
+        <label for="avatar">Profile photo</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*" class="file-input"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="/auth/login">Sign in</a></p>
+  </div>
+</main>
+<script>
+const input=document.getElementById('interests-input');
+const display=document.getElementById('tags-display');
+const hidden=document.getElementById('interests-hidden');
+let tags=[];
+function renderTags(){display.innerHTML=tags.map((t,i)=>`<span class="tag">${t}<button type="button" onclick="removeTag(${i})">×</button></span>`).join('');hidden.innerHTML=tags.map(t=>`<input type="hidden" name="interests" value="${t}"/>`).join('');}
+input.addEventListener('keydown',e=>{if(e.key===','||e.key==='Enter'){e.preventDefault();const v=input.value.trim().replace(/,$/,'');if(v&&!tags.includes(v)){tags.push(v);renderTags();}input.value='';}});
+function removeTag(i){tags.splice(i,1);renderTags();}
+</script>
+<%- include('../partials/footer') %>

@@ -1,0 +1,12 @@
+const express = require('express');
+const router  = express.Router();
+const { requireAuth, requireAdmin } = require('../middleware/auth');
+const ctrl = require('../controllers/adminController');
+router.use(requireAuth, requireAdmin);
+router.get('/',                ctrl.getDashboard);
+router.get('/users',           ctrl.getUsers);
+router.post('/users/:id/toggle', ctrl.toggleUser);
+router.post('/users/:id/delete', ctrl.deleteUser);
+router.post('/reports/:id/resolve', ctrl.resolveReport);
+router.get('/payments',        ctrl.getPayments);
+module.exports = router;

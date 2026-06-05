@@ -1,0 +1,70 @@
+<%- include('../partials/head') %><%- include('../partials/nav') %>
+<main>
+<section class="hero" id="hero">
+  <div class="hero-glow hero-glow--pink"></div><div class="hero-glow hero-glow--purple"></div>
+  <div class="hero-badge"><span class="hero-badge-dot"></span>AI-powered matchmaking &nbsp;·&nbsp; Available worldwide 🌍</div>
+  <h1 class="hero-title">Where real connections begin.</h1>
+  <p class="hero-sub">HeartLink blends thoughtful design with intelligent matchmaking so you spend less time swiping and more time falling for someone real.</p>
+  <div class="hero-cta"><a href="/auth/register" class="btn btn-primary btn-lg">Start matching free</a><a href="#showcase" class="btn btn-ghost btn-lg">See how it works</a></div>
+  <div class="hero-proof"><span class="hero-proof-dot">💞</span>2.4M+ matches made this week across 180+ countries</div>
+  <div class="hero-card"><div class="hero-card-inner"><div class="hero-card-top"><div class="hc-avatars"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=80&q=80" alt="Sofia"/><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80" alt="James" class="hc-avatar2"/></div><div><p class="hc-label">It's a match! 🎉</p><p class="hc-sub">Sofia &amp; James liked each other</p></div></div><div class="hc-compat"><span class="hc-compat-label">Compatibility</span><span class="hc-compat-score">96%</span></div><div class="hc-bar-wrap"><div class="hc-bar" style="width:96%"></div></div></div></div>
+</section>
+<section class="section" id="features">
+  <div class="section-inner">
+    <p class="section-eyebrow">Why HeartLink</p>
+    <h2 class="section-title">Built for the way love works today.</h2>
+    <p class="section-sub">Modern tools designed for genuine connection — without the burnout of endless swiping.</p>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI Matchmaking</h3><p>Smarter suggestions based on values, interests, and conversation style — not just photos.</p></div>
+      <div class="feature-card"><div class="feature-icon">💬</div><h3>AI Icebreakers</h3><p>Never stare at an empty chat box. Get personalised conversation starters for each match.</p></div>
+      <div class="feature-card"><div class="feature-icon">✅</div><h3>Verified Profiles</h3><p>Photo verification and fake-profile detection keep your experience safe and real.</p></div>
+      <div class="feature-card"><div class="feature-icon">🎯</div><h3>Smart Discovery</h3><p>Filter by interests, distance, and lifestyle goals. Find people who fit your life.</p></div>
+      <div class="feature-card"><div class="feature-icon">⚡</div><h3>Real-time Chat</h3><p>Typing indicators, read receipts, photo sharing — messaging that feels alive.</p></div>
+      <div class="feature-card"><div class="feature-icon">💳</div><h3>Secure Payments</h3><p>Upgrade instantly with any card worldwide. All payments secured by Stripe.</p></div>
+    </div>
+  </div>
+</section>
+<section class="section section--dark" id="showcase">
+  <div class="section-inner">
+    <p class="section-eyebrow">How it works</p>
+    <h2 class="section-title">Swipe with intention.</h2>
+    <p class="section-sub">Every profile is enriched with compatibility insights, shared interests, and AI-curated conversation starters.</p>
+    <div class="showcase-wrap">
+      <div class="showcase-cards">
+        <div class="sc-card sc-card--back"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=400&q=80" alt="Maya"/><div class="sc-card-overlay"></div><div class="sc-card-info"><b>Maya, 28</b><span>Designer · London</span></div></div>
+        <div class="sc-card sc-card--mid"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80" alt="Liam"/><div class="sc-card-overlay"></div><div class="sc-card-info"><b>Liam, 29</b><span>Engineer · Toronto</span></div></div>
+        <div class="sc-card sc-card--front" id="sc-front"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Sofia"/><div class="sc-card-overlay"></div><div class="sc-badge">96% match</div><div class="sc-card-info"><b>Sofia, 26</b><span>Photographer · NYC</span></div><div class="sc-actions"><button class="sc-btn sc-btn--nope" onclick="demoSwipe('left')">✕</button><button class="sc-btn sc-btn--like" onclick="demoSwipe('right')">💖</button><button class="sc-btn sc-btn--super" onclick="demoSwipe('up')">⭐</button></div></div>
+      </div>
+      <ul class="showcase-list"><li><span class="sl-check">✓</span>Compatibility score on every card</li><li><span class="sl-check">✓</span>Full bio, photos, and prompts on tap</li><li><span class="sl-check">✓</span>Super Like to stand out instantly</li><li><span class="sl-check">✓</span>Undo your last swipe with Premium</li></ul>
+    </div>
+  </div>
+</section>
+<section class="section" id="stories">
+  <div class="section-inner">
+    <p class="section-eyebrow">Love stories</p><h2 class="section-title">Real people, real chemistry.</h2>
+    <div class="stories-grid">
+      <div class="story-card story-card--featured"><div class="story-quote">"Met my partner in 3 weeks. The AI icebreakers started a real conversation — not the usual 'hey'."</div><div class="story-people"><div class="story-avatars"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=60&q=80" alt="Ava"/><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80" alt="Noah"/></div><div><p class="story-name">Ava &amp; Noah</p><p class="story-detail">Together 8 months · New York</p></div></div></div>
+      <div class="story-card"><div class="story-quote">"Finally a dating app that respects my time. The matches feel curated, not random."</div><div class="story-people"><div class="story-avatars"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80" alt="Priya"/></div><div><p class="story-name">Priya</p><p class="story-detail">London, UK</p></div></div></div>
+      <div class="story-card"><div class="story-quote">"The verified badge made me feel safe enough to actually meet people in real life."</div><div class="story-people"><div class="story-avatars"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=60&q=80" alt="Marco"/></div><div><p class="story-name">Marco</p><p class="story-detail">Milan, Italy</p></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="section section--dark" id="pricing">
+  <div class="section-inner">
+    <p class="section-eyebrow">Pricing</p><h2 class="section-title">Love at every level.</h2>
+    <p class="section-sub">Start free. Upgrade when you're ready. All payments in USD via Stripe.</p>
+    <div class="stripe-accepted-banner"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/></svg><span>Visa · Mastercard · Amex · Apple Pay · Google Pay accepted</span></div>
+    <div class="pricing-grid">
+      <div class="pricing-card"><p class="pricing-tier">Free</p><p class="pricing-tagline">Start meeting people today.</p><div class="pricing-price"><span class="pricing-amount">$0</span><span class="pricing-per">/month</span></div><a href="/auth/register" class="btn btn-ghost btn-block pricing-btn">Get started</a><ul class="pricing-perks"><li>✓ Unlimited swipes</li><li>✓ Basic matching</li><li>✓ Real-time chat</li><li>✓ Photo verification</li></ul></div>
+      <div class="pricing-card pricing-card--popular"><div class="pricing-popular-badge">Most popular</div><p class="pricing-tier">Plus</p><p class="pricing-tagline">Stand out and see more.</p><div class="pricing-price"><span class="pricing-amount">$9.99</span><span class="pricing-per">/month</span></div><% if(locals.sessionUser){ %><a href="/payment/pay/plus" class="btn btn-primary btn-block pricing-btn">Upgrade 💳</a><% }else{ %><a href="/auth/register" class="btn btn-primary btn-block pricing-btn">Go Plus</a><% } %><div class="stripe-note">💳 Stripe · All currencies</div><ul class="pricing-perks"><li>✓ Everything in Free</li><li>✓ See who liked you</li><li>✓ 5 Super Likes / day</li><li>✓ Unlimited rewinds</li><li>✓ Advanced filters</li></ul></div>
+      <div class="pricing-card pricing-card--vip"><p class="pricing-tier">VIP</p><p class="pricing-tagline">The full premium experience.</p><div class="pricing-price"><span class="pricing-amount">$19.99</span><span class="pricing-per">/month</span></div><% if(locals.sessionUser){ %><a href="/payment/pay/vip" class="btn btn-primary btn-block pricing-btn">Upgrade 💳</a><% }else{ %><a href="/auth/register" class="btn btn-primary btn-block pricing-btn">Become VIP</a><% } %><div class="stripe-note">💳 Stripe · All currencies</div><ul class="pricing-perks"><li>✓ Everything in Plus</li><li>✓ Monthly profile boost</li><li>✓ AI concierge</li><li>✓ Priority support</li><li>✓ VIP verified badge</li></ul></div>
+    </div>
+  </div>
+</section>
+</main>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('navbar--scrolled',window.scrollY>20);});
+document.querySelectorAll('a[href^="#"],a[href^="/#"]').forEach(a=>{a.addEventListener('click',e=>{const h=(a.getAttribute('href').startsWith('/#')?a.getAttribute('href').slice(2):a.getAttribute('href').slice(1));const el=document.getElementById(h);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}});});
+let sd=false;function demoSwipe(dir){if(sd)return;sd=true;const c=document.getElementById('sc-front');c.classList.add(dir==='right'?'sc-swipe-right':dir==='left'?'sc-swipe-left':'sc-swipe-up');setTimeout(()=>{c.classList.remove('sc-swipe-right','sc-swipe-left','sc-swipe-up');sd=false;},600);}
+</script>
+<%- include('../partials/footer-full') %>

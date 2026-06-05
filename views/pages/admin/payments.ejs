@@ -1,0 +1,34 @@
+<%- include('../../partials/head') %>
+<nav class="tinder-nav"><div class="tn-left"><a href="/" class="tn-logo"><img src="/img/logo.svg" alt="HeartLink" class="tn-logo-img"/></a></div><div class="tn-right"><a href="/dashboard" class="btn btn-ghost btn-sm">App</a><form action="/auth/logout" method="POST" style="display:inline"><button class="btn btn-ghost btn-sm" type="submit">Sign out</button></form></div></nav>
+<main class="admin-main">
+  <div class="admin-wrap">
+    <div class="admin-sidebar">
+      <p class="admin-sidebar-title">Admin Panel</p>
+      <a href="/admin" class="admin-nav-link">📊 Dashboard</a>
+      <a href="/admin/users" class="admin-nav-link">👥 Users</a>
+      <a href="/admin/payments" class="admin-nav-link active">💳 Payments</a>
+    </div>
+    <div class="admin-content">
+      <h1 class="admin-page-title">Payments</h1>
+      <div class="admin-stat-card asc-green" style="max-width:220px;margin-bottom:24px"><div class="asc-icon">💰</div><div class="asc-n">$<%= Number(total).toFixed(2) %></div><div class="asc-l">Total Confirmed Revenue</div></div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>User</th><th>Email</th><th>Plan</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody>
+            <% payments.forEach(p => { %>
+              <tr>
+                <td><%= p.name %></td>
+                <td style="font-size:12px;color:var(--muted)"><%= p.email %></td>
+                <td><span class="plan-badge plan-badge--<%= p.plan %>"><%= p.plan.toUpperCase() %></span></td>
+                <td style="color:#4ade80;font-weight:700">$<%= Number(p.amount_usd).toFixed(2) %></td>
+                <td><span class="status-pill status-pill--<%= p.status %>"><%= p.status %></span></td>
+                <td style="font-size:12px;color:var(--muted)"><%= new Date(p.created_at).toLocaleDateString() %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="/js/main.js"></script></body></html>

@@ -1,0 +1,51 @@
+<nav class="tinder-nav" id="navbar">
+  <div class="tn-left">
+    <a href="/" class="tn-logo"><img src="/img/logo.svg" alt="HeartLink" class="tn-logo-img"/></a>
+  </div>
+  <% if (locals.sessionUser) { %>
+  <div class="tn-center">
+    <a href="/dashboard" class="tn-icon-btn <%= locals.activePage==='dashboard'?'tn-active':'' %>" title="Explore">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+    </a>
+    <a href="/chats" class="tn-icon-btn <%= locals.activePage==='chats'?'tn-active':'' %>" title="Messages" style="position:relative">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      <span class="tn-unread-dot" id="nav-unread-dot" style="display:none"></span>
+    </a>
+  </div>
+  <div class="tn-right">
+    <% if (locals.sessionUser.role === 'admin') { %>
+      <a href="/admin" class="btn btn-primary btn-sm" style="margin-right:8px">Admin</a>
+    <% } %>
+    <a href="/profile" class="tn-avatar-btn <%= locals.activePage==='profile'?'tn-active':'' %>" title="Profile">
+      <div class="tn-avatar-ring">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+    </a>
+    <form action="/auth/logout" method="POST" style="display:inline">
+      <button class="tn-icon-btn" type="submit" title="Sign out">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+      </button>
+    </form>
+  </div>
+  <div class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <a href="/dashboard" class="mbn-item <%= locals.activePage==='dashboard'?'mbn-active':'' %>">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+      <span>Explore</span>
+    </a>
+    <a href="/chats" class="mbn-item <%= locals.activePage==='chats'?'mbn-active':'' %>" style="position:relative">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      <span>Messages</span>
+      <span class="mbn-badge" id="mbn-unread-dot" style="display:none"></span>
+    </a>
+    <a href="/profile" class="mbn-item <%= locals.activePage==='profile'?'mbn-active':'' %>">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      <span>Profile</span>
+    </a>
+  </div>
+  <% } else { %>
+  <div class="tn-right">
+    <a href="/auth/login"    class="btn btn-ghost">Sign in</a>
+    <a href="/auth/register" class="btn btn-primary">Get Started</a>
+  </div>
+  <% } %>
+</nav>

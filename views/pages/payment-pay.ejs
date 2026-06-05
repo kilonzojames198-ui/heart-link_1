@@ -1,0 +1,13 @@
+<%- include('../partials/head') %><%- include('../partials/nav') %>
+<main class="auth-page"><div class="auth-card auth-card--wide mpesa-card">
+  <div class="mpesa-header"><div class="mpesa-logo-wrap"><span class="mpesa-logo-icon">💳</span><div><h2 class="auth-title" style="margin-bottom:2px">Upgrade to <%= planDetails.label %></h2><p class="auth-sub" style="margin:0"><strong>$<%= planDetails.amount_usd %>/month</strong> via Stripe</p></div></div><div class="plan-badge plan-badge--<%= plan %>"><%= planDetails.label %></div></div>
+  <% if(error){ %><div class="alert alert-error"><%= error %></div><% } %>
+  <% if(locals.isLocalMode){ %><div class="local-mode-banner" style="margin-bottom:16px"><p class="local-mode-title">🛠️ Local Test Mode</p><p class="local-mode-sub">No Stripe keys detected. Click below to simulate payment.</p></div><% } %>
+  <div class="mpesa-summary"><div class="summary-row"><span>Plan</span><span><strong>HeartLink <%= planDetails.label %></strong></span></div><div class="summary-row"><span>Amount</span><span class="summary-amount" style="color:#a5b4fc">$<%= planDetails.amount_usd %> USD</span></div><div class="summary-row"><span>Method</span><span><% if(locals.isLocalMode){ %>Test mode<% }else{ %>Stripe — Visa · Mastercard · Amex<% } %></span></div></div>
+  <form action="/payment/pay/<%= plan %>" method="POST" style="margin-top:16px">
+    <button type="submit" class="btn-stripe btn-block"><% if(locals.isLocalMode){ %>🛠️ Simulate Payment<% }else{ %><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/></svg> Pay $<%= planDetails.amount_usd %> with Stripe<% } %></button>
+    <p style="text-align:center;font-size:12px;color:var(--hint);margin-top:10px">🔒 Secured by Stripe · Cancel anytime</p>
+  </form>
+  <p class="auth-switch"><a href="/#pricing">← Back to pricing</a></p>
+</div></main>
+<%- include('../partials/footer') %>
